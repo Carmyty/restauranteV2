@@ -6,9 +6,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use App\Http\Controllers\PublicFoodController;
-
-
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 
@@ -59,7 +58,7 @@ Route::get('/public/api/menu', function () {
     $body=$response->body();
     $array=json_decode($body);
     //dd ($array);
-    return view('menu.menu_api')->with('productos',$array);
+    return view('catalogoBD.menu_BD')->with('productos',$array);
 })->name ('api.menu');
 //Route::get('/public/api/menu','menu.menu_api');
 
@@ -71,19 +70,6 @@ Route::get('/public/api/menuDetalle/{id}', function ($id) {
     return view('menu.detalle_menu_api')->with('producto',$item);
 })->name('api.menuDetalle');
 
-/*---------Aqui empieza lo del carritoooooo---------*/
-Route::get ('/public/menu',[PublicFoodController::class,'productList'])->name('menu');
-
-Route::get('/cart/List', [CartController::class, 'cartList'])->name('cart.list');
-Route::post('/cart/Store', [CartController::class, 'addToCart'])->name('cart.store');
-Route::post('/cart/update-cart', [CartController::class, 'updateCart'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'removeCart'])->name('cart.remove');
-Route::post('/cart/clear', [CartController::class, 'clearAllCart'])->name('cart.clear');
-
-
-/*---------Aqui termina lo del carrito-----------*/
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -93,5 +79,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('/admin/users', UserController::class);
     Route::resource('/admin/orders', OrderController::class);   
 });
+
+Route::get('cart', [CartController::class, 'cartList'])->name('cart.list');
+Route::post('cart', [CartController::class, 'addToCart'])->name('cart.store');
+Route::post('update-cart', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('remove', [CartController::class, 'removeCart'])->name('cart.remove');
+Route::post('clear', [CartController::class, 'clearAllCart'])->name('cart.clear');
+
+Route::post("pay",[PaymentController::class,"pay"])->name("payment");
+Route::get("success",[PaymentController::class,"success"]);
+Route::get("error",[PaymentController::class,"error"]);
 
 require __DIR__.'/auth.php';
