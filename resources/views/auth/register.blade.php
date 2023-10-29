@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" >
         @csrf
 
         <!-- Name -->
@@ -15,6 +15,28 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+
+        {{-- category --}}
+        <div class="mt-4">
+            <x-input-label for="category" :value="__('category')" />
+            <x-text-input id="categpry" class="block mt-1 w-full" type="text" name="category" :value="old('categpry')" />
+            <x-input-error :messages="$errors->get('category')" class="mt-2" />
+        </div>
+
+        {{-- image --}}
+
+        <div class="mt-4">
+            <x-input-label for="image" :value="__('image')" />
+            <x-text-input id="image" class="block mt-1 w-full" type="file" name="image" accept="image/*" :value="old('image')" required autocomple="image" />
+            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+        </div>
+
+        {{-- status --}}
+        {{-- <div class="mt-4">
+            <x-input-label for="status" :value="__('status')" /> --}}
+            <x-text-input id="status" class="block mt-1 w-full" type="hidden" name="status" value="ACTIVO" required />
+            {{-- <x-input-error :messages="$errors->get('status')" class="mt-2" />
+        </div> --}}
 
         <!-- Password -->
         <div class="mt-4">
